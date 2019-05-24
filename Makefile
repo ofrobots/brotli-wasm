@@ -1,23 +1,27 @@
 
 BROTLI=third_party/brotli
-COMMA:=,
-
-SRCS=${BROTLI}/c/common/dictionary.c ${BROTLI}/c/common/transform.c ${BROTLI}/c/dec/bit_reader.c ${BROTLI}/c/dec/decode.c ${BROTLI}/c/dec/huffman.c ${BROTLI}/c/dec/state.c main.c
-OBJS=$(SRCS:.c=.o)
-
 SYSROOT=$$HOME/opt/wasi-sdk-5.0/opt/wasi-sdk/share/sysroot
 TARGET=wasm32-unknown-wasi
-EXPORTS=BrotliDecoderSetParameter BrotliDecoderCreateInstance BrotliDecoderDestroyInstance BrotliDecoderDecompress BrotliDecoderDecompressStream BrotliDecoderHasMoreOutput BrotliDecoderTakeOutput BrotliDecoderIsUsed BrotliDecoderIsFinished BrotliDecoderGetErrorCode BrotliDecoderErrorString BrotliDecoderVersion
+COMMA:=,
+
+SOURCES=$(wildcard ${BROTLI}/c/common/*.c) $(wildcard ${BROTLI}/c/dec/*.c) \
+	$(wildcard ${BROTLI}/c/enc/*.c) main.o
+OBJECTS=$(SOURCES:.c=.o)
+
+
+EXPORTS=BrotliDecoderSetParameter BrotliDecoderCreateInstance BrotliDecoderDestroyInstance BrotliDecoderDecompress BrotliDecoderDecompressStream BrotliDecoderHasMoreOutput BrotliDecoderTakeOutput BrotliDecoderIsUsed BrotliDecoderIsFinished BrotliDecoderGetErrorCode BrotliDecoderErrorString BrotliDecoderVersion BrotliEncoderSetParameter BrotliEncoderCreateInstance BrotliEncoderDestroyInstance BrotliEncoderMaxCompressedSize BrotliEncoderCompress BrotliEncoderCompressStream BrotliEncoderIsFinished BrotliEncoderHasMoreOutput BrotliEncoderTakeOutput BrotliEncoderVersion
+
 EXPORT_FLAGS=$(addprefix -Wl$(COMMA)--export=,$(EXPORTS))
 
 CFLAGS=-I${BROTLI}/c/include --sysroot $(SYSROOT) --target=$(TARGET)
 
+.PHONY: all clean
 
-all: brotlidec.wasm
+all: brotli.wasm
 clean:
-	rm -f brotlidec.wasm $(OBJS)
+	rm -f brotli.wasm $(OBJECTS)
 
-brotlidec.wasm: $(OBJS)
+brotli.wasm: $(OBJECTS)
 	clang -Wl,--no-entry $(EXPORT_FLAGS) $(CFLAGS) -o $@ $^
 
 %.o: %.c

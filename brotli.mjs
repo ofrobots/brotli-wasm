@@ -1,5 +1,6 @@
 
-// node --experimental-modules --experimental-wasm-modules decoder.mjs
+// Requires the WASI pr https://github.com/nodejs/node/pull/27850
+// node --experimental-modules --experimental-wasm-modules --experimental-wasi-modules brotli.mjs
 
 import * as brotli from './brotli.wasm';
 

@@ -1,21 +1,11 @@
 
 // node --experimental-modules --experimental-wasm-modules decoder.mjs
 
-import * as decoder from './brotli.wasm';
+import * as brotli from './brotli.wasm';
 
-console.dir(decoder);
+console.dir(brotli);
 
-console.dir(decoder.BrotliDecoderVersion().toString(16));
-
-// BROTLI_DEC_API BrotliDecoderResult BrotliDecoderDecompress(
-//     size_t encoded_size,
-//     const uint8_t encoded_buffer[BROTLI_ARRAY_PARAM(encoded_size)],
-//     size_t* decoded_size,
-//     uint8_t decoded_buffer[BROTLI_ARRAY_PARAM(*decoded_size)]);
-// BROTLI_DEC_API BrotliDecoderResult BrotliDecoderDecompressStream(
-//   BrotliDecoderState* state, size_t* available_in, const uint8_t** next_in,
-//   size_t* available_out, uint8_t** next_out, size_t* total_out);
-
+console.dir(brotli.BrotliDecoderVersion().toString(16));
 
 
   const input = Int8Array.from([
@@ -25,7 +15,7 @@ console.dir(decoder.BrotliDecoderVersion().toString(16));
 
 const output = new Int8Array(100);
 
-const state = decoder.BrotliDecoderCreateInstance();
+const state = brotli.BrotliDecoderCreateInstance();
 
-decoder.BrotliDecoderDecompressStream(input.length, input, output.length, output);
-console.log(output);
+brotli.BrotliDecoderDecompressStream(input.length, input, output.length, output);
+console.log('output', output);

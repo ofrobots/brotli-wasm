@@ -1,0 +1,15 @@
+URL: https://github.com/google/brotli/tree/78e7bbc3c34bb85ecc9a912929e8b3b224973b05
+Version: https://github.com/google/brotli/tree/78e7bbc3c34bb85ecc9a912929e8b3b224973b05
+License: MIT
+License File: # LICENSE
+Description:
+       Brotli compression format
+Local Modifications:
+       Imported as a git-subtree.
+
+       $ git remote add -f brotli https://github.com/google/brotli
+       $ git subtree add --prefix third_party/brotli brotli master --squash
+
+       To update from remote on an ongoing basis:
+       $ git fetch brotli
+       $ git subtree pull --prefix third_party/brotli brotli master --squash
